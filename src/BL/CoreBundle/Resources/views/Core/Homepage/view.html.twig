@@ -1,0 +1,5 @@
+{% extends "BLCoreBundle::Core/layout.html.twig" %}
+
+{% block core_body %}
+    {{ render(controller("BLPlatformBundle:Advert:menu", {'limit': 3})) }}
+{% endblock %}

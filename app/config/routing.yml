@@ -1,0 +1,3 @@
+bl_platform:
+    resource: "@BLPlatformBundle/Resources/config/routing.yml"
+    prefix:   /

@@ -1,0 +1,33 @@
+bl_platform_home:
+    path: /{page}
+    defaults:
+        page: 1
+        _controller: BLPlatformBundle:Advert:index
+    requirements:
+        page: \d*
+
+bl_platform_view:
+    path:      /advert/{id}
+    defaults:
+        _controller: BLPlatformBundle:Advert:view
+    requirements:
+        id: \d+
+
+bl_platform_add:
+    path:      /add
+    defaults:
+        _controller: BLPlatformBundle:Advert:add
+
+bl_platform_edit:
+    path:      /edit/{id}
+    defaults:
+        _controller: BLPlatformBundle:Advert:edit
+    requirements:
+        id: \d+
+
+bl_platform_delete:
+    path:      /delete/{id}
+    defaults:
+        _controller: BLPlatformBundle:Advert:delete
+    requirements:
+        id: \d+

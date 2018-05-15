@@ -1,0 +1,4 @@
+services:
+#    bl_core.example:
+#        class: BL\CoreBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

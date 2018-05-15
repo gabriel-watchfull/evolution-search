@@ -1,0 +1,26 @@
+{# src/OC/PlatformBundle/Resources/views/layout.html.twig #}
+
+
+{% extends "BLCoreBundle::layout.html.twig" %}
+
+
+{% block title %}
+
+  Bienvenue sur notre plateforme
+
+{% endblock %}
+
+
+{% block body %}
+
+  <h1>Bienvenue sur notre plateforme</h1>
+
+
+  {# On définit un nouveau bloc, que les vues du bundle pourront remplir #}
+
+  {% block core_body %}
+
+  {% endblock %}
+
+
+{% endblock %}

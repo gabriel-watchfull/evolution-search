@@ -1,0 +1,3 @@
+core_contact:
+    path:     /contact
+    defaults: { _controller: BLCoreBundle:Core:contact }
