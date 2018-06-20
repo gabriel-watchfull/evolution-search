@@ -5,9 +5,16 @@ namespace BL\PlatformBundle\Controller;
 use BL\PlatformBundle\Entity\Advert;
 use BL\PlatformBundle\Entity\Application;
 use BL\PlatformBundle\Entity\Image;
+use BL\PlatformBundle\Form\AdvertType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class AdvertController extends Controller
 {
@@ -62,57 +69,51 @@ class AdvertController extends Controller
     {
 
         $advert = new Advert();
-        $advert->setTitle('Recherche développeur Syfony.');
-        $advert->setAuthor('Gabriel');
-        $advert->setContent("Nous recherchons un développeur Symfony débutant sur Lyon. Blabla…");
 
-        $image = new Image();
-        $image->setUrl('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
-        $image->setAlt('job de rêve');
-
-        $advert->setImage($image);
-
-        $application1 = new Application();
-        $application1->setAuthor('Pierre');
-        $application1->setContent('Je suis très motivé');
-
-        $application2 = new Application();
-        $application2->setAuthor('Marine');
-        $application2->setContent('J\'ai toute les qualités requises');
-
-        $application1->setAdvert($advert);
-        $application2->setAdvert($advert);
-
-        $em = $this->getDoctrine()->getManager();
-
-        $em->persist($advert);
-
-
-
-        $em->flush();
+        $form = $this->get('form.factory')->create(AdvertType::class,$advert);
 
         if ($request->isMethod('POST')) {
-            $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
-            return $this->redirectToRoute('bl_platform_view', array('id' => $advert->getId()));
+            $form->handleRequest($request);
+
+            if($form->isValid()) {
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($advert);
+                $em->flush();
+
+                $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée');
+
+                return $this->redirectToRoute('bl_platform_view', array('id' => $advert->getId()));
+            }
         }
 
-        return $this->render('BLPlatformBundle:Advert:add.html.twig');
+        return $this->render('BLPlatformBundle:Advert:add.html.twig', array(
+           'form' => $form->createView(),
+        ));
     }
 
     public function editAction($id, Request $request)
     {
-        if ($request->isMethod('POST')) {
-            $request->getSession()->getFlashBag()->add('notice', 'Annonce bien modifiée.');
-            return $this->redirectToRoute('bl_platform_view', array('id' => 5));
-        }
-
         $em = $this->getDoctrine()->getManager();
 
-        $advert = $em->getRepository('BLPlatformBundle:Advert')->find($id);
+        $advert = $em
+            ->getRepository('BLPlatformBundle:Advert')
+            ->find($id)
+        ;
 
         if (null === $advert) {
             throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
         }
+
+        $formBuilder = $this->get('form.factory')->create(AdvertType::class, $advert);
+
+        $formBuilder->add('date', DateType::class)
+            ->add('title', TextType::class)
+            ->add('content', TextareaType::class)
+            ->add('author', TextType::class)
+            ->add('published', CheckboxType::class, array('required' => false))
+            ->add('save', SubmitType::class)
+            ->getForm();
 
         $listCategories = $em->getRepository('BLPlatformBundle:Category')->findAll();
         foreach ($listCategories as $category) {
@@ -124,10 +125,13 @@ class AdvertController extends Controller
             $advert->addContract($contract);
         }
 
-        $em->flush();
+        if ($request->isMethod('POST')) {
+            $request->getSession()->getFlashBag()->add('notice', 'Annonce bien modifiée.');
+            return $this->redirectToRoute('bl_platform_view', array('id' => $id));
+        }
 
         return $this->render('BLPlatformBundle:Advert:edit.html.twig', array(
-            'advert' => $advert
+            'form' => $formBuilder,
         ));
     }
 
