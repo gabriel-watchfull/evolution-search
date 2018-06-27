@@ -2,6 +2,7 @@
 
 namespace BL\PlatformBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -25,6 +26,12 @@ class AdvertType extends AbstractType
             ->add('content',   TextareaType::class)
             ->add('published', CheckboxType::class, array('required' => false))
             ->add('image', ImageType::class)
+            ->add('categories', EntityType::class, array(
+                'class'        => 'BLPlatformBundle:Category',
+                'choice_label' => 'name',
+                'multiple'     => true,
+                'expanded'     => true,
+            ))
             ->add('save',      SubmitType::class);
     }
 

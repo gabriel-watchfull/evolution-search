@@ -6,6 +6,7 @@ use BL\PlatformBundle\Entity\Advert;
 use BL\PlatformBundle\Entity\Application;
 use BL\PlatformBundle\Entity\Image;
 use BL\PlatformBundle\Form\AdvertType;
+use BL\PlatformBundle\Form\AdvertEditType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -105,15 +106,7 @@ class AdvertController extends Controller
             throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
         }
 
-        $formBuilder = $this->get('form.factory')->create(AdvertType::class, $advert);
-
-        $formBuilder->add('date', DateType::class)
-            ->add('title', TextType::class)
-            ->add('content', TextareaType::class)
-            ->add('author', TextType::class)
-            ->add('published', CheckboxType::class, array('required' => false))
-            ->add('save', SubmitType::class)
-            ->getForm();
+        $formBuilder = $this->get('form.factory')->create(AdvertEditType::class, $advert);
 
         $listCategories = $em->getRepository('BLPlatformBundle:Category')->findAll();
         foreach ($listCategories as $category) {
@@ -131,7 +124,7 @@ class AdvertController extends Controller
         }
 
         return $this->render('BLPlatformBundle:Advert:edit.html.twig', array(
-            'form' => $formBuilder,
+            'form' => $formBuilder->createView(),
         ));
     }
 
