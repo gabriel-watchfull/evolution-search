@@ -177,6 +177,10 @@ class Image
         return 'uploads/img';
     }
 
+    public function getWebPath () {
+        return $this->getUploadDir().'/'.$this->getId().'.'.$this->getUrl();
+    }
+
     protected  function getUploadRootDir() {
         return __DIR__.'/../../../../web/'.$this->getUploadDir();
     }
