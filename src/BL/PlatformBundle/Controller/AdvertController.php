@@ -70,8 +70,8 @@ class AdvertController extends Controller
     {
 
         $advert = new Advert();
-
-        $form = $this->get('form.factory')->create(AdvertType::class,$advert);
+        
+        $form = $this->createForm(AdvertType::class, $advert);
 
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
@@ -128,9 +128,21 @@ class AdvertController extends Controller
         ));
     }
 
-    public function deleteAction($id)
+    public function deleteAction($id, Request $request)
     {
-        return $this->render('BLPlatformBundle:Advert:delete.html.twig');
+        $em = $this->getDoctrine()->getManager();
+
+        $advert = $em
+            ->getRepository('BLPlatformBundle:Advert')
+            ->find($id)
+        ;
+
+        if (null === $advert) {
+            throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
+        }
+
+        $request->getSession()->getFlashBag()->add('notice', 'Annonce bien supprimmé.');
+        return $this->redirectToRoute('bl_platform_home');
     }
 
     public function menuAction($limit)

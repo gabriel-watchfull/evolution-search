@@ -12,7 +12,11 @@
 
 
 {% block body %}
-
+    <p>
+    {% for message in app.session.flashbag.get('notice') %}
+        <p>Message flash : {{ message }}</p>
+    {% endfor %}
+    </p>
 
     {# On définit un sous-titre commun à toutes les pages du bundle, par exemple #}
 
