@@ -106,25 +106,18 @@ class AdvertController extends Controller
             throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
         }
 
-        $formBuilder = $this->get('form.factory')->create(AdvertEditType::class, $advert);
+        $form = $this->get('form.factory')->create(AdvertEditType::class, $advert);
 
-        $listCategories = $em->getRepository('BLPlatformBundle:Category')->findAll();
-        foreach ($listCategories as $category) {
-            $advert->addCategory($category);
-        }
+        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
 
-        $listContracts = $em->getRepository('BLPlatformBundle:Contract')->findAll();
-        foreach ($listContracts as $contract) {
-            $advert->addContract($contract);
-        }
+            $em->flush();
 
-        if ($request->isMethod('POST')) {
             $request->getSession()->getFlashBag()->add('notice', 'Annonce bien modifiée.');
-            return $this->redirectToRoute('bl_platform_view', array('id' => $id));
+            return $this->redirectToRoute('bl_platform_view', array('id' => $advert->getId()));
         }
 
         return $this->render('BLPlatformBundle:Advert:edit.html.twig', array(
-            'form' => $formBuilder->createView(),
+            'form' => $form->createView(),
         ));
     }
 
@@ -140,6 +133,12 @@ class AdvertController extends Controller
         if (null === $advert) {
             throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
         }
+
+
+        $em->remove($advert);
+
+        $em->flush();
+
 
         $request->getSession()->getFlashBag()->add('notice', 'Annonce bien supprimmé.');
         return $this->redirectToRoute('bl_platform_home');

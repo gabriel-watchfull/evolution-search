@@ -72,5 +72,4 @@ class AdvertType extends AbstractType
         return 'bl_platformbundle_advert';
     }
 
-
 }
