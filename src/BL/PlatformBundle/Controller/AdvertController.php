@@ -2,6 +2,7 @@
 
 namespace BL\PlatformBundle\Controller;
 
+use BL\PlatformBundle\BLPlatformBundle;
 use BL\PlatformBundle\Entity\Advert;
 use BL\PlatformBundle\Entity\Application;
 use BL\PlatformBundle\Entity\Image;
@@ -134,14 +135,21 @@ class AdvertController extends Controller
             throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
         }
 
+        $form = $this->get('form.factory')->create();
 
-        $em->remove($advert);
+        if($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+            $em->remove($advert);
+            $em->flush();
+            $request->getSession()->getFlashBag()->add('notice', 'Annonce bien supprimmé.');
+            return $this->redirectToRoute('bl_platform_home');
+        }
 
-        $em->flush();
+        return $this->render('BLPlatformBundle:Advert:delete.html.twig', array(
+            'advert' => $advert,
+            'form' => $form->createView(),
+        ));
 
 
-        $request->getSession()->getFlashBag()->add('notice', 'Annonce bien supprimmé.');
-        return $this->redirectToRoute('bl_platform_home');
     }
 
     public function menuAction($limit)
