@@ -2,6 +2,7 @@
 
 namespace BL\PlatformBundle\Entity;
 
+use BL\PlatformBundle\Validator\Antiflood;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
@@ -54,6 +55,7 @@ class Advert
      *
      * @ORM\Column(name="content", type="text")
      * @Assert\NotBlank()
+     * @Antiflood()
      *
      */
     private $content;
