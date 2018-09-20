@@ -18,6 +18,7 @@ class AppKernel extends Kernel
             new BL\PlatformBundle\BLPlatformBundle(),
             new BL\CoreBundle\BLCoreBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+            new BL\UserBundle\BLUserBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

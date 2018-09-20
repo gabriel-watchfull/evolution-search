@@ -1,3 +1,8 @@
+bl_user:
+    resource: "@BLUserBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 bl_platform:
     resource: "@BLPlatformBundle/Resources/config/routing.yml"
     prefix:   /
