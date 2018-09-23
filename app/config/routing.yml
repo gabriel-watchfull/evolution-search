@@ -6,3 +6,14 @@ bl_user:
 bl_platform:
     resource: "@BLPlatformBundle/Resources/config/routing.yml"
     prefix:   /
+
+login:
+    path: /login
+    defaults:
+        _controller: BLUserBundle:Security:login
+
+login_check:
+    path: /login_check
+
+logout:
+    path: /logout
