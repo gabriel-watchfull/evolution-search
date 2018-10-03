@@ -20,3 +20,9 @@ services:
     arguments: ["@request_stack", "@doctrine.orm.entity_manager"]
     tags:
       - { name: validator.constraint_validator, alias: bl_platform_antiflood }
+  bl_platform.twig.antispam_extension:
+    class: BL\PlatformBundle\Twig\AntispamExtension
+    arguments:
+      - "@bl_platform.antispam"
+    tags:
+      - { name: twig.extension }

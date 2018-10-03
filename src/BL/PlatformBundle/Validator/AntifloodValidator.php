@@ -25,7 +25,7 @@ class AntifloodValidator extends ConstraintValidator {
         $ip = $request->getClientIp();
 
         $isFlood = $this->em
-            ->getRepository('BLPlatformBundle:Application')
+            ->getRepository('BLPlatformBundle:Application');
 
     }
 
