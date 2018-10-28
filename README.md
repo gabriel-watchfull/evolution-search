@@ -1,4 +1,4 @@
 BiologyLearning
 ===============
 
-A Symfony project created on April 2, 2018, 9:20 am.
+Une plateforme d'emploi belle et agréable à utiliser qui a pour objectif de fournir des offres d'emplois pour les biologistes
