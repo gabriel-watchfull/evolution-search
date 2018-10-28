@@ -26,3 +26,12 @@ services:
       - "@bl_platform.antispam"
     tags:
       - { name: twig.extension }
+  bl_platform.beta.html_adder:
+    class: BL\PlatformBundle\Beta\BetaHTMLAdder
+  bl_platform.beta.listener:
+    class: BL\PlatformBundle\Beta\BetaListener
+    arguments:
+      - "@bl_platform.beta.html_adder"
+      - "2019-10-25"
+    tags:
+      - { name: kernel.event_listener, event: kernel.response, method: processBeta}
