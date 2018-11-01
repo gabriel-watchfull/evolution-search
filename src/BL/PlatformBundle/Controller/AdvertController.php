@@ -6,6 +6,8 @@ use BL\PlatformBundle\BLPlatformBundle;
 use BL\PlatformBundle\Entity\Advert;
 use BL\PlatformBundle\Entity\Application;
 use BL\PlatformBundle\Entity\Image;
+use BL\PlatformBundle\Event\PlatformEvents;
+use BL\PlatformBundle\Event\MessagePostEvent;
 use BL\PlatformBundle\Form\AdvertType;
 use BL\PlatformBundle\Form\AdvertEditType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -78,9 +80,13 @@ class AdvertController extends Controller
         $form = $this->createForm(AdvertType::class, $advert);
 
         if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
+            if($form->handleRequest($request)->isValid()) {
 
-            if($form->isValid()) {
+                $event = new MessagePostEvent($advert->getContent(), $advert->getAuthor());
+
+                $this->get('event_dispatcher')->dispatch(PlatformEvents::POST_MESSAGE, $event);
+
+                $advert->setContent($event->getMessage());
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($advert);

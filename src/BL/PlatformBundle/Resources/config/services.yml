@@ -35,3 +35,16 @@ services:
       - "2019-10-25"
     tags:
       - { name: kernel.event_listener, event: kernel.response, method: processBeta}
+
+  bl_platform.bigbrother.message_notificator:
+    class: BL\PlatformBundle\BigBrother\MessageNotificator
+    arguments:
+      - "@mailer"
+
+  bl_platform.bigbrother.message_listener:
+    class: BL\PlatformBundle\BigBrother\MessageListener
+    arguments:
+      - "@bl_platform.bigbrother.message_notificator"
+      - ["alexandre", "marine", "pierre"]
+    tags:
+      - { name: kernel.event_listener, event: bl_platform.post_message, method: processMessage }
