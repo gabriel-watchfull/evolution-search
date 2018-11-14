@@ -82,11 +82,13 @@ class AdvertController extends Controller
         if ($request->isMethod('POST')) {
             if($form->handleRequest($request)->isValid()) {
 
-                $event = new MessagePostEvent($advert->getContent(), $advert->getAuthor());
+                //TODO  create  $advert->getAuthor()
+                //https://openclassrooms.com/fr/courses/3619856-developpez-votre-site-web-avec-le-framework-symfony/3625219-le-gestionnaire-devenements-de-symfony
+                //$event = new MessagePostEvent($advert->getContent(), $advert->getAuthor());
 
-                $this->get('event_dispatcher')->dispatch(PlatformEvents::POST_MESSAGE, $event);
+                //$this->get('event_dispatcher')->dispatch(PlatformEvents::POST_MESSAGE, $event);
 
-                $advert->setContent($event->getMessage());
+                //$advert->setContent($event->getMessage());
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($advert);

@@ -95,6 +95,15 @@ class Advert
     private $updatedAt;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="city", type="string", length=255)
+     * @Assert\Length(min=2)
+     *
+     */
+    private $city;
+
+    /**
     * @ORM\Column(name="nb_applications", type="integer")
     */
     private $nbApplications = 0;
@@ -453,5 +462,29 @@ class Advert
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    /**
+     * Set city
+     *
+     * @param string $city
+     *
+     * @return Advert
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->city;
     }
 }
